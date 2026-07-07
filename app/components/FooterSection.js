@@ -15,56 +15,83 @@ export default function FooterSection({ lang }) {
     let W = 0;
     let H = 0;
     let diyas = [];
+    let stars = [];
+    let streaks = [];
     let running = false;
     let rafId = null;
+    let initialized = false;
+
+    const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function initElements(dpr) {
+      const count = Math.min(16, Math.max(9, Math.floor(W / dpr / 60)));
+      diyas = [];
+      for (let i = 0; i < count; i++) {
+        diyas.push({
+          x: Math.random() * W,
+          y: H * 0.6 + Math.random() * H * 0.34,
+          r: (5 + Math.random() * 5) * dpr,
+          vx: (0.04 + Math.random() * 0.1) * dpr * (Math.random() < 0.5 ? -1 : 1),
+          ph: Math.random() * Math.PI * 2,
+          fl: 0.7 + Math.random() * 0.6,
+        });
+      }
+
+      stars = Array.from({ length: 70 }, () => ({
+        fx: Math.random(),
+        fy: Math.random() * 0.4,
+        r: 0.6 + Math.random() * 1.2,
+        f: 0.5 + Math.random(),
+        ph: Math.random() * 6.28,
+      }));
+
+      streaks = Array.from({ length: 6 }, () => ({
+        fx: Math.random(),
+        fy: 0.58 + Math.random() * 0.36,
+        w: 0.08 + Math.random() * 0.12,
+        sp: (0.02 + Math.random() * 0.05) * (Math.random() < 0.5 ? -1 : 1),
+      }));
+    }
 
     function size() {
       if (!sec || !cv) return;
       const dpr = window.devicePixelRatio || 1;
-      W = cv.width = sec.offsetWidth * dpr;
-      H = cv.height = sec.offsetHeight * dpr;
+      const oldW = W;
+      const newW = sec.offsetWidth * dpr;
+      const newH = sec.offsetHeight * dpr;
+
+      W = cv.width = newW;
+      H = cv.height = newH;
       cv.style.width = sec.offsetWidth + 'px';
       cv.style.height = sec.offsetHeight + 'px';
+
+      if (newW > 0 && newH > 0) {
+        if (!initialized) {
+          initElements(dpr);
+          initialized = true;
+        } else if (oldW > 0 && oldW !== newW) {
+          // Adjust existing diyas x coordinate proportionally on resize
+          diyas.forEach((d) => {
+            d.x = (d.x / oldW) * newW;
+          });
+        }
+
+        if (isReduced) {
+          draw(0);
+        }
+      }
     }
-
-    size();
-    window.addEventListener('resize', size);
-
-    const dpr = window.devicePixelRatio || 1;
-    const count = Math.min(16, Math.max(9, Math.floor(sec.offsetWidth / 60)));
-
-    function makeDiya() {
-      return {
-        x: Math.random() * W,
-        y: H * 0.6 + Math.random() * H * 0.34,
-        r: (5 + Math.random() * 5) * dpr,
-        vx: (0.04 + Math.random() * 0.1) * dpr * (Math.random() < 0.5 ? -1 : 1),
-        ph: Math.random() * Math.PI * 2,
-        fl: 0.7 + Math.random() * 0.6,
-      };
-    }
-
-    for (let i = 0; i < count; i++) {
-      diyas.push(makeDiya());
-    }
-
-    const stars = Array.from({ length: 70 }, () => ({
-      fx: Math.random(),
-      fy: Math.random() * 0.4,
-      r: 0.6 + Math.random() * 1.2,
-      f: 0.5 + Math.random(),
-      ph: Math.random() * 6.28,
-    }));
-
-    const streaks = Array.from({ length: 6 }, () => ({
-      fx: Math.random(),
-      fy: 0.58 + Math.random() * 0.36,
-      w: 0.08 + Math.random() * 0.12,
-      sp: (0.02 + Math.random() * 0.05) * (Math.random() < 0.5 ? -1 : 1),
-    }));
 
     function draw(t) {
-      if (!running) return;
+      if (!initialized) {
+        size();
+        if (!initialized) {
+          // Retry later on next frame
+          rafId = requestAnimationFrame(draw);
+          return;
+        }
+      }
+
       ctx.clearRect(0, 0, W, H);
       const currentDpr = window.devicePixelRatio || 1;
 
@@ -136,10 +163,14 @@ export default function FooterSection({ lang }) {
         ctx.fill();
       });
 
-      rafId = requestAnimationFrame(draw);
+      if (running) {
+        rafId = requestAnimationFrame(draw);
+      }
     }
 
-    const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    size();
+    window.addEventListener('resize', size);
+
     if (isReduced) {
       running = false;
       // Draw static single frame
@@ -152,9 +183,12 @@ export default function FooterSection({ lang }) {
       observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((e) => {
-            if (e.isIntersecting && !running) {
-              running = true;
-              rafId = requestAnimationFrame(draw);
+            if (e.isIntersecting) {
+              size();
+              if (!running) {
+                running = true;
+                rafId = requestAnimationFrame(draw);
+              }
             } else if (!e.isIntersecting && running) {
               running = false;
               if (rafId) cancelAnimationFrame(rafId);

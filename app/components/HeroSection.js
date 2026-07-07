@@ -5,6 +5,29 @@ import { useEffect, useRef, useState } from 'react';
 export default function HeroSection({ revealed }) {
   const videoRef = useRef(null);
   const [scrollVisible, setScrollVisible] = useState(false);
+  const [heroHeight, setHeroHeight] = useState('100vh');
+
+  // Lock height on mobile to prevent address bar recalculation jitter
+  useEffect(() => {
+    let lastWidth = window.innerWidth;
+
+    const lockHeight = () => {
+      setHeroHeight(`${window.innerHeight}px`);
+    };
+
+    lockHeight();
+
+    const handleResize = () => {
+      // Recalculate only if width changes (e.g. orientation changes or desktop resizing)
+      if (window.innerWidth !== lastWidth) {
+        lastWidth = window.innerWidth;
+        lockHeight();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Setup basic video properties and timers on mount
   useEffect(() => {
@@ -42,17 +65,10 @@ export default function HeroSection({ revealed }) {
       video.currentTime = 0.001;
     }
 
-    const handlePlay = () => {
-      video.play().catch(() => {
-        setScrollVisible(true);
-      });
-    };
-
-    if (video.readyState >= 2) {
-      handlePlay();
-    } else {
-      video.addEventListener('canplay', handlePlay, { once: true });
-    }
+    // Call play directly to ensure mobile browsers start downloading/rendering
+    video.play().catch(() => {
+      setScrollVisible(true);
+    });
 
     let observer = null;
     if ('IntersectionObserver' in window) {
@@ -60,7 +76,7 @@ export default function HeroSection({ revealed }) {
         (entries) => {
           entries.forEach((e) => {
             if (e.isIntersecting) {
-              if (video.paused && video.readyState >= 2 && video.currentTime < video.duration - 0.1) {
+              if (video.paused && video.currentTime < video.duration - 0.1) {
                 video.play().catch(() => {});
               }
             } else {
@@ -76,7 +92,6 @@ export default function HeroSection({ revealed }) {
     }
 
     return () => {
-      video.removeEventListener('canplay', handlePlay);
       if (observer) {
         observer.unobserve(video);
       }
@@ -91,7 +106,7 @@ export default function HeroSection({ revealed }) {
   };
 
   return (
-    <section id="hero-video-section">
+    <section id="hero-video-section" style={{ height: heroHeight }}>
       <video
         id="hero-vid"
         ref={videoRef}
