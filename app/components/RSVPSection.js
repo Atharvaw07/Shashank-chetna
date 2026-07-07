@@ -77,7 +77,7 @@ export default function RSVPSection({ lang, setModalType }) {
 
     try {
       const res = await fetch(
-        'https://wedding-backend-production-54c0.up.railway.app/api/rsvp',
+        'https://api.invitevibes.in/api/rsvp',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
