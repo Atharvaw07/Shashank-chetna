@@ -38,7 +38,7 @@ export default function FamilySection({ lang }) {
             className="invite-text"
             style={{ marginBottom: '1.5rem' }}
             dangerouslySetInnerHTML={{
-              __html: `स्वर्गीय श्री रामकृष्ण चतुर्वेदी & स्वर्गीय श्रीमती कुंती चतुर्वेदी<br>स्व. श्रीमती जंत्रो देवी जैन & स्व. लाला लखीराम जैन<br>के दिव्य आशीर्वाद से<br><br>हम आपको सादर आमंत्रित करते हैं इस मंगलमय विवाह समारोह में`,
+              __html: `अपनो के स्नेह, बुजुर्गों के आशीर्वाद एवं प्रभु कृपा से<br><br>हम आपको सादर आमंत्रित करते हैं इस मंगलमय विवाह समारोह में`,
             }}
           />
         ) : (
@@ -46,7 +46,7 @@ export default function FamilySection({ lang }) {
             className="invite-text"
             style={{ marginBottom: '1.5rem' }}
             dangerouslySetInnerHTML={{
-              __html: `With the divine blessings of<br>Late Shri Ram Krishna Chaturvedi &amp; Late Smt. Kunti Chaturvedi<br>Lt. Smt. Jantro Devi Jain &amp; Lt. Lala Lakhi Ram Jain<br><br>We request the honour of your gracious presence at the wedding celebrations of`,
+              __html: `With hearts full of gratitude and the blessings of our elders,<br><br>We request the honour of your gracious presence at the wedding celebrations of`,
             }}
           />
         )}
