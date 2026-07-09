@@ -34,6 +34,15 @@ export default function HeroSection({ revealed }) {
     const video = videoRef.current;
     if (!video) return;
 
+    // iOS Safari: set src directly on video element — some iOS versions don't
+    // reliably pick up the src from a <source> child element, especially when
+    // hidden. Do this on mount so it preloads during the entry gate!
+    const source = video.querySelector('source');
+    if (source && source.src && !video.src) {
+      video.src = source.src;
+      video.load();
+    }
+
     const handleEnded = () => {
       video.pause();
       setScrollVisible(true);
@@ -61,14 +70,26 @@ export default function HeroSection({ revealed }) {
     const video = videoRef.current;
     if (!video || !revealed) return;
 
-    if (video.currentTime === 0) {
-      video.currentTime = 0.001;
-    }
+    const tryPlay = () => {
+      // Wrap in try/catch — iOS throws DOMException if seek happens before
+      // the video has loaded enough data (readyState < HAVE_METADATA)
+      if (video.currentTime === 0) {
+        try { video.currentTime = 0.001; } catch (_) {}
+      }
+      video.play().catch(() => {
+        setScrollVisible(true);
+      });
+    };
 
-    // Call play directly to ensure mobile browsers start downloading/rendering
-    video.play().catch(() => {
-      setScrollVisible(true);
-    });
+    // Don't call play() blindly — on iOS Safari with cellular, readyState can
+    // still be 0 even with preload="auto" when the gate first opens.
+    // Wait for canplay OR loadeddata (iOS fires loadeddata before canplay).
+    if (video.readyState >= 2) {
+      tryPlay();
+    } else {
+      video.addEventListener('canplay', tryPlay, { once: true });
+      video.addEventListener('loadeddata', tryPlay, { once: true });
+    }
 
     let observer = null;
     if ('IntersectionObserver' in window) {
@@ -76,7 +97,9 @@ export default function HeroSection({ revealed }) {
         (entries) => {
           entries.forEach((e) => {
             if (e.isIntersecting) {
-              if (video.paused && video.currentTime < video.duration - 0.1) {
+              // Guard against NaN: video.duration is NaN on iOS before metadata loads
+              const dur = isFinite(video.duration) ? video.duration : Infinity;
+              if (video.paused && video.currentTime < dur - 0.1) {
                 video.play().catch(() => {});
               }
             } else {
@@ -92,6 +115,8 @@ export default function HeroSection({ revealed }) {
     }
 
     return () => {
+      video.removeEventListener('canplay', tryPlay);
+      video.removeEventListener('loadeddata', tryPlay);
       if (observer) {
         observer.unobserve(video);
       }

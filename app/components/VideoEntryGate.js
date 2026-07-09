@@ -80,7 +80,7 @@ export default function VideoEntryGate({ onPlayStart, onReveal }) {
       } catch (err) {
         // Fallback to muted autoplay if unmuted is blocked by browser rules
         video.muted = true;
-        video.play().catch(() => {});
+        video.play().catch(() => { });
       }
     } else {
       // Second tap while playing skips the video and reveals the main content

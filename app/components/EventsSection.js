@@ -18,10 +18,10 @@ export default function EventsSection({ lang }) {
             const video = e.target;
             if (e.isIntersecting) {
               if (video.readyState >= 2) {
-                video.play().catch(() => {});
+                video.play().catch(() => { });
               } else {
                 const playOnReady = () => {
-                  video.play().catch(() => {});
+                  video.play().catch(() => { });
                   video.removeEventListener('canplay', playOnReady);
                 };
                 video.addEventListener('canplay', playOnReady);
@@ -38,9 +38,9 @@ export default function EventsSection({ lang }) {
     } else {
       activeVideos.forEach((v) => {
         if (v.readyState >= 2) {
-          v.play().catch(() => {});
+          v.play().catch(() => { });
         } else {
-          v.addEventListener('canplay', () => v.play().catch(() => {}), { once: true });
+          v.addEventListener('canplay', () => v.play().catch(() => { }), { once: true });
         }
       });
     }

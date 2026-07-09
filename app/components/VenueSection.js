@@ -10,7 +10,7 @@ export default function VenueSection({ lang }) {
     if (!video) return;
 
     const handleCanPlay = () => {
-      video.play().catch(() => {});
+      video.play().catch(() => { });
     };
 
     video.addEventListener('canplay', handleCanPlay);
@@ -26,7 +26,7 @@ export default function VenueSection({ lang }) {
           entries.forEach((e) => {
             if (e.isIntersecting) {
               if (video.readyState >= 2) {
-                video.play().catch(() => {});
+                video.play().catch(() => { });
               }
             } else {
               video.pause();
