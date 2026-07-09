@@ -57,9 +57,12 @@ export default function VideoEntryGate({ onPlayStart, onReveal }) {
       gateRef.current.classList.add('fade-out');
     }
 
-    // Delay unmounting to let the 1.5s CSS opacity fade-out complete smoothly
+    // Call onReveal IMMEDIATELY so HeroSection starts loading while the gate fades!
+    onReveal();
+
+    // Hide the gate completely after the fade-out animation completes
     setTimeout(() => {
-      onReveal();
+      if (gateRef.current) gateRef.current.style.display = 'none';
     }, 1500);
   };
 

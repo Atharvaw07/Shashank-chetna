@@ -102,9 +102,7 @@ export default function WeddingPage() {
       />
 
       {/* Entry Gate overlay */}
-      {!revealed && (
-        <VideoEntryGate onPlayStart={handlePlayStart} onReveal={handleReveal} />
-      )}
+      <VideoEntryGate onPlayStart={handlePlayStart} onReveal={handleReveal} />
 
       {/* Main content layer, rendered but visually hidden behind the gate */}
       <div id="main-content" className={revealed ? 'visible' : ''} aria-hidden={!revealed}>
