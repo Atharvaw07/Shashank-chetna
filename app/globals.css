@@ -1120,15 +1120,16 @@ body.lang-hi .contact-plain strong {
 }
 
 .swiper-video-box {
-  width: 100%;
-  max-width: 340px;
-  margin: 2rem auto 0;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  border: 1px solid var(--gold-light);
-  box-shadow: var(--shadow);
-  background: #000
-}
+    width: 100%;
+    max-width: 340px;
+    margin: 2rem auto 0;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    border: 1px solid var(--gold-light);
+    box-shadow: var(--shadow);
+    background: linear-gradient(135deg,var(--teal-pale),var(--ivory-2));
+    min-height: 200px;
+  }
 
 .swiper-video-box video {
   width: 100%;
@@ -1587,4 +1588,14 @@ body.lang-hi .contact-plain strong {
   letter-spacing: 0.34em;
   text-transform: uppercase;
   color: rgba(220, 208, 179, 0.6);
+}
+.evt-video--skeleton {
+  min-height: 200px;
+  background: linear-gradient(90deg, var(--ivory) 25%, var(--teal-pale) 50%, var(--ivory) 75%);
+  background-size: 400% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }

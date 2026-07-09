@@ -17,7 +17,7 @@ export default function VideoEntryGate({ onPlayStart, onReveal }) {
       setBufferReady(true);
       // Seek to first frame so the video (envelope) is shown in the background
       if (video.currentTime === 0) {
-        video.currentTime = 0.001;
+        try { video.currentTime = 0.001; } catch (_) {}
       }
     };
 
@@ -106,6 +106,7 @@ export default function VideoEntryGate({ onPlayStart, onReveal }) {
         muted
         playsInline
         webkit-playsinline="true"
+        x-webkit-airplay="deny"
         preload="auto"
         onEnded={triggerReveal}
         onError={triggerReveal}

@@ -112,6 +112,7 @@ export default function HeroSection({ revealed }) {
         muted
         playsInline
         webkit-playsinline="true"
+        x-webkit-airplay="deny"
         disablePictureInPicture
         disableRemotePlayback
         controlsList="nodownload noplaybackrate nofullscreen noremoteplayback"
