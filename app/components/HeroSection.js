@@ -109,7 +109,7 @@ export default function HeroSection({ revealed }) {
         controlsList="nodownload noplaybackrate nofullscreen noremoteplayback"
         onContextMenu={(e) => e.preventDefault()}
         preload="auto"
-        src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/compressed/Hero%20(1).mp4"
+        src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/common-assets/hero-video-BkP1eoiB%20(1)%20(1)%20(1).mp4"
       >
       </video>
       <button
