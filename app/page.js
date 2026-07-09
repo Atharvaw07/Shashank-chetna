@@ -76,13 +76,18 @@ export default function WeddingPage() {
       audioRef.current.play().catch(() => {});
     }
     // Start sequential downloading of rest of media files in the background!
-    beginDeferredMediaLoad();
+    // delay this slightly to let the first video stream without network contention
+    setTimeout(() => {
+      beginDeferredMediaLoad();
+    }, 5000);
   };
 
   const handleReveal = () => {
     setRevealed(true);
     // Double protection trigger
-    beginDeferredMediaLoad();
+    setTimeout(() => {
+      beginDeferredMediaLoad();
+    }, 5000);
   };
 
   return (

@@ -34,15 +34,6 @@ export default function HeroSection({ revealed }) {
     const video = videoRef.current;
     if (!video) return;
 
-    // iOS Safari: set src directly on video element — some iOS versions don't
-    // reliably pick up the src from a <source> child element, especially when
-    // hidden. Do this on mount so it preloads during the entry gate!
-    const source = video.querySelector('source');
-    if (source && source.src && !video.src) {
-      video.src = source.src;
-      video.load();
-    }
-
     const handleEnded = () => {
       video.pause();
       setTimeout(() => {
@@ -118,11 +109,8 @@ export default function HeroSection({ revealed }) {
         controlsList="nodownload noplaybackrate nofullscreen noremoteplayback"
         onContextMenu={(e) => e.preventDefault()}
         preload="auto"
+        src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/compressed/Hero%20(1).mp4"
       >
-        <source
-          src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/compressed/Hero%20(1).mp4"
-          type="video/mp4"
-        />
       </video>
       <button
         className={`scroll-indicator ${scrollVisible ? 'visible' : ''}`}

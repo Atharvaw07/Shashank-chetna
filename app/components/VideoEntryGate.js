@@ -42,6 +42,10 @@ export default function VideoEntryGate({ onPlayStart, onReveal }) {
       video.removeEventListener('canplaythrough', handleCanPlay);
       video.removeEventListener('loadeddata', handleCanPlay);
       clearTimeout(safety);
+      // Clean up video properly to free memory on iOS Safari
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
     };
   }, []);
 
@@ -114,11 +118,8 @@ export default function VideoEntryGate({ onPlayStart, onReveal }) {
           opacity: bufferReady ? 1 : 0,
           transition: 'opacity 0.8s ease',
         }}
+        src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/compressed/Best%20Entry%20Video%20(9)%20(1).mp4"
       >
-        <source
-          src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/compressed/Best%20Entry%20Video%20(9)%20(1).mp4"
-          type="video/mp4"
-        />
       </video>
 
       {/* Loading Overlay */}
