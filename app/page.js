@@ -106,8 +106,8 @@ export default function WeddingPage() {
         <VideoEntryGate onPlayStart={handlePlayStart} onReveal={handleReveal} />
       )}
 
-      {/* Main content layer, rendered but visibility handled by CSS */}
-      <div id="main-content" className={revealed ? 'visible' : ''}>
+      {/* Main content layer, rendered but visually hidden behind the gate */}
+      <div id="main-content" className={revealed ? 'visible' : ''} aria-hidden={!revealed}>
         {/* Floating Petals Canvas */}
         {revealed && <Petals />}
 

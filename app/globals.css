@@ -282,7 +282,6 @@ body.lang-hi .contact-plain strong {
 }
 
 #main-content{
-  visibility:hidden;
   position:fixed;
   inset:0;
   z-index:0;
@@ -290,7 +289,6 @@ body.lang-hi .contact-plain strong {
   overflow:hidden;
 }
 #main-content.visible{
-  visibility:visible;
   position:static;
   overflow:visible;
   pointer-events:auto;
