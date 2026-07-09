@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { hydrateVideo } from '../lib/deferredMedia';
 
 export default function HeroSection({ revealed }) {
   const videoRef = useRef(null);
@@ -64,9 +63,6 @@ export default function HeroSection({ revealed }) {
     const video = videoRef.current;
     if (!video || !revealed) return;
 
-    // Load video only when revealed, exactly like ivorytheme
-    hydrateVideo(video);
-
     const tryPlay = () => {
       // Wrap in try/catch — iOS throws DOMException if seek happens before
       // the video has loaded enough data (readyState < HAVE_METADATA)
@@ -112,12 +108,9 @@ export default function HeroSection({ revealed }) {
         disableRemotePlayback
         controlsList="nodownload noplaybackrate nofullscreen noremoteplayback"
         onContextMenu={(e) => e.preventDefault()}
-        preload="none"
+        preload="auto"
+        src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/compressed/Hero%20(1).mp4"
       >
-        <source
-          data-src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/compressed/Hero%20(1).mp4"
-          type="video/mp4"
-        />
       </video>
       <button
         className={`scroll-indicator ${scrollVisible ? 'visible' : ''}`}
