@@ -150,7 +150,7 @@ export default function WeddingPage() {
         </div>
 
         {/* Sections */}
-        <HeroSection revealed={revealed} />
+        <HeroSection revealed={revealed} preloadHero={musicWanted} />
         <FamilySection lang={lang} />
         <StorySection lang={lang} />
         <VenueSection lang={lang} />

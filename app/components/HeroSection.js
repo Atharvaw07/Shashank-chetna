@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { hydrateVideo } from '../lib/deferredMedia';
 
-export default function HeroSection({ revealed }) {
+export default function HeroSection({ revealed, preloadHero }) {
   const videoRef = useRef(null);
   const [scrollVisible, setScrollVisible] = useState(false);
   const [heroHeight, setHeroHeight] = useState('100vh');
@@ -30,12 +30,19 @@ export default function HeroSection({ revealed }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Hydrate video as soon as user clicks the entry gate (preloadHero = true)
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || (!revealed && !preloadHero)) return;
+
+    hydrateVideo(video);
+  }, [revealed, preloadHero]);
+
   // Handle playback exactly like ivorytheme
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !revealed) return;
 
-    hydrateVideo(video);
     video.loop = false;
 
     const onEnded = () => {
