@@ -45,14 +45,16 @@ export default function HeroSection({ revealed }) {
 
     const handleEnded = () => {
       video.pause();
-      setScrollVisible(true);
+      setTimeout(() => {
+        setScrollVisible(true);
+      }, 5000); // 5 seconds after video done
     };
 
     const handleLoadedMetadata = () => {
       if (video.duration && isFinite(video.duration)) {
         setTimeout(() => {
           setScrollVisible(true);
-        }, video.duration * 1000 + 200);
+        }, video.duration * 1000 + 5000);
       }
     };
 
