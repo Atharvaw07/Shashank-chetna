@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { hydrateVideo } from '../lib/deferredMedia';
 
 export default function HeroSection({ revealed }) {
   const videoRef = useRef(null);
@@ -29,62 +30,40 @@ export default function HeroSection({ revealed }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Setup basic video properties and timers on mount
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const handleEnded = () => {
-      video.pause();
-      setTimeout(() => {
-        setScrollVisible(true);
-      }, 5000); // 5 seconds after video done
-    };
-
-    const handleLoadedMetadata = () => {
-      if (video.duration && isFinite(video.duration)) {
-        setTimeout(() => {
-          setScrollVisible(true);
-        }, video.duration * 1000 + 5000);
-      }
-    };
-
-    video.addEventListener('ended', handleEnded);
-    video.addEventListener('loadedmetadata', handleLoadedMetadata);
-
-    return () => {
-      video.removeEventListener('ended', handleEnded);
-      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-    };
-  }, []);
-
-  // Handle playback once entry gate is opened
+  // Handle playback exactly like ivorytheme
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !revealed) return;
 
-    const tryPlay = () => {
-      // Wrap in try/catch — iOS throws DOMException if seek happens before
-      // the video has loaded enough data (readyState < HAVE_METADATA)
-      if (video.currentTime === 0) {
-        try { video.currentTime = 0.001; } catch (_) {}
-      }
+    hydrateVideo(video);
+    video.loop = false;
+
+    const onEnded = () => {
+      video.pause();
+      setTimeout(() => setScrollVisible(true), 5000);
+    };
+    video.addEventListener('ended', onEnded);
+
+    const startPlayback = () => {
       video.play().catch(() => {
         setScrollVisible(true);
       });
     };
 
-    // Wait for canplay OR loadeddata (iOS fires loadeddata before canplay).
-    if (video.readyState >= 2) {
-      tryPlay();
+    let onCanPlay;
+    if (video.readyState >= 3) { // HTMLMediaElement.HAVE_FUTURE_DATA
+      startPlayback();
     } else {
-      video.addEventListener('canplay', tryPlay, { once: true });
-      video.addEventListener('loadeddata', tryPlay, { once: true });
+      onCanPlay = () => {
+        video.removeEventListener('canplay', onCanPlay);
+        startPlayback();
+      };
+      video.addEventListener('canplay', onCanPlay);
     }
 
     return () => {
-      video.removeEventListener('canplay', tryPlay);
-      video.removeEventListener('loadeddata', tryPlay);
+      video.removeEventListener('ended', onEnded);
+      if (onCanPlay) video.removeEventListener('canplay', onCanPlay);
     };
   }, [revealed]);
 
@@ -108,9 +87,12 @@ export default function HeroSection({ revealed }) {
         disableRemotePlayback
         controlsList="nodownload noplaybackrate nofullscreen noremoteplayback"
         onContextMenu={(e) => e.preventDefault()}
-        preload="auto"
-        src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/compressed/Hero%20(1).mp4"
+        preload="none"
       >
+        <source
+          data-src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/compressed/Hero%20(1).mp4"
+          type="video/mp4"
+        />
       </video>
       <button
         className={`scroll-indicator ${scrollVisible ? 'visible' : ''}`}
