@@ -67,7 +67,7 @@ export default function HeroSection({ revealed }) {
     };
   }, []);
 
-  // Handle playback and observation once entry gate is opened
+  // Handle playback once entry gate is opened
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !revealed) return;
@@ -83,8 +83,6 @@ export default function HeroSection({ revealed }) {
       });
     };
 
-    // Don't call play() blindly — on iOS Safari with cellular, readyState can
-    // still be 0 even with preload="auto" when the gate first opens.
     // Wait for canplay OR loadeddata (iOS fires loadeddata before canplay).
     if (video.readyState >= 2) {
       tryPlay();
@@ -93,35 +91,9 @@ export default function HeroSection({ revealed }) {
       video.addEventListener('loadeddata', tryPlay, { once: true });
     }
 
-    let observer = null;
-    if ('IntersectionObserver' in window) {
-      observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              // Guard against NaN: video.duration is NaN on iOS before metadata loads
-              const dur = isFinite(video.duration) ? video.duration : Infinity;
-              if (video.paused && video.currentTime < dur - 0.1) {
-                video.play().catch(() => {});
-              }
-            } else {
-              if (!video.paused) {
-                video.pause();
-              }
-            }
-          });
-        },
-        { threshold: 0.3 }
-      );
-      observer.observe(video);
-    }
-
     return () => {
       video.removeEventListener('canplay', tryPlay);
       video.removeEventListener('loadeddata', tryPlay);
-      if (observer) {
-        observer.unobserve(video);
-      }
     };
   }, [revealed]);
 
