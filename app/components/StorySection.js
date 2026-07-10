@@ -83,7 +83,7 @@ export default function StorySection({ lang }) {
             preload="none"
           >
             <source
-              data-src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/compressed/July_Shashank%20%26%20Chetna%20-%20December_Swiper%20video%20(1)%20(1)%20(1).mp4"
+              data-src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/Swiper%20video%20(2)%20(1).mp4"
               type="video/mp4"
             />
           </video>

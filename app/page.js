@@ -7,6 +7,7 @@ import AudioControl from './components/AudioControl';
 import Petals from './components/Petals';
 import HeroSection from './components/HeroSection';
 import FamilySection from './components/FamilySection';
+import CountdownSection from './components/CountdownSection';
 import StorySection from './components/StorySection';
 import VenueSection from './components/VenueSection';
 import EventsSection from './components/EventsSection';
@@ -152,6 +153,7 @@ export default function WeddingPage() {
         {/* Sections */}
         <HeroSection revealed={revealed} preloadHero={musicWanted} />
         <FamilySection lang={lang} />
+        <CountdownSection lang={lang} />
         <StorySection lang={lang} />
         <VenueSection lang={lang} />
         <EventsSection lang={lang} />
