@@ -34,22 +34,23 @@ export default function FamilySection({ lang }) {
 
         {/* Invitation Text */}
         {lang === 'hi' ? (
-          <p
-            className="invite-text"
-            style={{ marginBottom: '1.5rem' }}
-            dangerouslySetInnerHTML={{
-              __html: `अपनो के स्नेह, बुजुर्गों के आशीर्वाद एवं प्रभु कृपा से<br><br>हम आपको सादर आमंत्रित करते हैं इस मंगलमय विवाह समारोह में`,
-            }}
-          />
-        ) : (
-          <p
-            className="invite-text"
-            style={{ marginBottom: '1.5rem' }}
-            dangerouslySetInnerHTML={{
-              __html: `With hearts full of gratitude and the blessings of our elders,<br><br>We request the honour of your gracious presence at the wedding celebrations of`,
-            }}
-          />
-        )}
+  <p
+    className="invite-text"
+    style={{ marginBottom: '1.5rem' }}
+    dangerouslySetInnerHTML={{
+      __html: `अपनों के स्नेह, बुजुर्गों के आशीर्वाद एवं प्रभु कृपा से<br><br>हम आपको सादर आमंत्रित करते हैं इस मंगलमय विवाह समारोह में`,
+    }}
+  />
+) : (
+  <p
+    className="invite-text"
+    style={{ marginBottom: '1.5rem' }}
+    dangerouslySetInnerHTML={{
+      __html: `With hearts full of gratitude and the divine blessings of <strong>Late Shri Ram Krishna Chaturvedi</strong> and <strong>Late Smt. Kunti Chaturvedi</strong>,<br><br>we warmly invite you to grace this joyous wedding celebration with your esteemed presence and blessings.`,
+    }}
+  />
+)}
+      
 
         {/* Groom Profile */}
         <span className="couple-name name-shimmer">Shashank</span>
