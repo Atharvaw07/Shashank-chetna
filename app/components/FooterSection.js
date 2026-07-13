@@ -241,7 +241,7 @@ export default function FooterSection({ lang }) {
       </svg>
 
       <div className="footer-inner tc reveal">
-        <span style={{ fontSize: '2.2rem', display: 'block', marginBottom: '1rem', opacity: 0.75 }}>🕉</span>
+        <img src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/New/Om%20Sign.avif" alt="Om Sign" style={{ height: '40px', display: 'block', margin: '0 auto 1rem', opacity: 0.75 }} />
         
         {lang === 'hi' ? (
           <p

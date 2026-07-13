@@ -97,7 +97,7 @@ export default function HeroSection({ revealed, preloadHero }) {
         preload="none"
       >
         <source
-          data-src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/compressed/Hero%20(1).mp4"
+          data-src="https://pub-1953a6673e864f3488c645252f75de98.r2.dev/July/Shashank%20%26%20Chetna%20-%20December/New/Best%20Entry%20Video%20(15)%20(1).mp4"
           type="video/mp4"
         />
       </video>
